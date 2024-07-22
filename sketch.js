@@ -1,4 +1,3 @@
-
 let def = 1;
 let ne = 1;
 let flowerx = [];
@@ -38,8 +37,9 @@ let rule;
 let randx = 0;
 let randy = 0;
 let instruction1 = true;
-let instruction2 = 1;
-let opentimes = 0;
+let instruction2 = false;
+let instruction1opentimes = 0;
+let instruction2opentimes = 0;
 // let newlayer=false
 function setup() {
     let cnv = createCanvas(800, 500);
@@ -48,10 +48,16 @@ function setup() {
 
 function draw() {
     if (instruction1 == true) {
+        textFont("Courier New", 25);
         textSize(30);
         fill(255);
-        text("Please click somewhere", 195, 60);
-        text("to grow your own mind flowers!", 140, 100);
+        if (feedpanel == false && ratepanel == false) {
+            text("Please click somewhere", 195, 60);
+            text("to grow your own mind flowers!", 140, 100);
+        } else {
+            fill(198, 223, 223);
+            rect(0, 0, 800, 500);
+        }
     }
     background(200, 220, 220, 40);
     //makebutton
@@ -61,7 +67,7 @@ function draw() {
     fill(130, 170, 130);
     ellipse(90, 445, 100, 50);
     fill(255);
-    textFont("Courier New", 25);
+    textSize(25);
     text("Feed", 61, 453);
 
     if (mouseIsPressed && mouseX < 150 && mouseY > 415 && ratepanel == false) {
@@ -69,11 +75,11 @@ function draw() {
     }
     //feedpanel
     if (feedpanel == true) {
-        opentimes += 1;
+        instruction2opentimes += 1;
         panelOn();
     }
-    if (opentimes >= 1) {
-        instruction2 = 3;
+    if (instruction2opentimes >= 1) {
+        instruction2 = false;
     }
     //ratepanel
 
@@ -83,23 +89,14 @@ function draw() {
     //in the growing panel
     if (feedpanel == false && ratepanel == false && frameCount > now + 10) {
         if (mouseIsPressed && (mouseX > 180 || mouseY < 390)) {
-            if (i == 0) {
-                wide = [[]];
-                high = [[]];
-                ripplex = [];
-                rippley = [];
-                m = 0;
-                R = [[]];
-                G = [[]];
-                B = [[]];
-                leavesnum = [[]];
-                angle = [[]];
-            }
             instruction1 = false;
-            if (instruction2 == 3) {
-                instruction2 = 1;
-            } else {
-                instruction2 = 2;
+            instruction1opentimes += 1;
+            if (instruction1opentimes == 1) {
+                fill(198, 223, 223);
+                rect(0, 0, 800, 500);
+            }
+            if (instruction2opentimes == 0) {
+                instruction2 = true;
             }
 
             a += 1;
@@ -161,30 +158,32 @@ function draw() {
                 anxious = 20;
             }
             let angry = 1;
+            let angry2 = 0;
             if (moodswitch[moodswitch.length - 1] == "angry") {
-                angry = 3;
-                anxious = 8;
+                angry = 1;
+                angry2 = 8;
+                anxious = 10;
             }
             let happy = 1;
             if (moodswitch[moodswitch.length - 1] == "happy") {
-                happy = 2;
-                angry = 1.5;
+                happy = 1.5;
+                angry = 2;
             }
 
             if (frameCount % (60 / anxious) == 1) {
-                if (randx >= 8) {
-                    randx += random(-10, -3);
-                } else if (randx <= -8) {
-                    randx += random(3, 10);
+                if (randx >= 8 + angry2) {
+                    randx += random(-10 - angry2, -3);
+                } else if (randx <= -8 - angry2) {
+                    randx += random(3, 10 + angry2);
                 }
-                if (randy >= 8) {
-                    randy += random(-10, -3);
-                } else if (randy <= -8) {
-                    randy += random(3, 10);
+                if (randy >= 8 + angry2) {
+                    randy += random(-10 - angry2, -3);
+                } else if (randy <= -8 - angry2) {
+                    randy += random(3, 10 + angry2);
                 }
                 if (-8 < randx < 8 && -8 < randy < 8) {
-                    randx += random(-1, 1);
-                    randy += random(-1, 1);
+                    randx += random(-1 - angry2, 1 + angry2);
+                    randy += random(-1 - angry2, 1 + angry2);
                 }
             }
             let speedx = angry * 10 * sin(angle[0][s]) + randx;
@@ -195,7 +194,7 @@ function draw() {
             strokeWeight(3);
             stroke(186, 218, 214);
             push();
-            if (frameCount % (5 / happy) == 1) {
+            if (frameCount % 5 == 1) {
                 angle[0][s] += 0.15 * 1.5 * happy;
             }
 
@@ -259,6 +258,7 @@ function draw() {
             }
             if (nlayers >= 1) {
                 for (let layer = 1; layer <= nlayers; layer++) {
+                    //draw triangles for even layer
                     if (layer % 3 == 1) {
                         fill(R[layer][s], G[layer][s], B[layer][s], 150);
                         stroke(R[layer][s], G[layer][s], B[layer][s], 150);
@@ -330,11 +330,15 @@ function draw() {
                 }
             }
         }
-        if (instruction2 == 2) {
+        if (instruction2 == true) {
             textSize(25);
             fill(255);
             text("Click the feed button to", 32, 360);
             text("feed your creature with mood!", 28, 390);
+        }
+        if (instruction2opentimes == 1) {
+            fill(198, 223, 223);
+            rect(0, 0, 800, 500);
         }
 
         //draw the ripple
@@ -612,10 +616,10 @@ function draw() {
     }
 
     function growingSystem(moodswitch, rr, gg, bb, score) {
-        if (1.8 - 0.1 * nlayers > 1.3) {
-            rule = 1.8 - 0.1 * nlayers;
+        if (1.5 - 0.1 * nlayers > 1.2) {
+            rule = 1.5 - 0.1 * nlayers;
         } else {
-            rule = 1.3;
+            rule = 1.2;
         }
         let noonedisappear = true;
 
@@ -631,11 +635,6 @@ function draw() {
                 flowery.splice(x, 1);
                 wide.splice(x, 1);
                 high.splice(x, 1);
-                i -= 1;
-                x -= 1;
-                if (i == 0) {
-                    growrate = [1];
-                }
                 noonedisappear = false;
             }
         }
@@ -656,18 +655,18 @@ function draw() {
                     }
                 } else if (score <= 8) {
                     if (growrate[nlayers] <= rule) {
-                        growrate[nlayers] += 0.08;
+                        growrate[nlayers] += 0.1;
                     }
                 }
             } else if (score <= 8) {
                 if (growrate[nlayers] <= rule) {
-                    growrate[nlayers] += 0.08;
+                    growrate[nlayers] += 0.1;
                 }
             }
         } else {
             if (score <= 8) {
                 if (growrate[nlayers] <= rule) {
-                    growrate[nlayers] += 0.08;
+                    growrate[nlayers] += 0.1;
                 }
             }
         }
@@ -690,8 +689,8 @@ function draw() {
 }
 function setOneLeaf(layer, s) {
     //generating leaves in random siz
-    wide[layer][s] = random(10, 20);
-    high[layer][s] = random(wide[layer][s] + 5, wide[layer][s] + random(10, 20));
+    wide[layer][s] = random(10, 15);
+    high[layer][s] = random(wide[layer][s] + 5, wide[layer][s] + random(8, 18));
     //draw one leaf
     if (layer % 2 == 1) {
         R[layer][s] = random(230, 250);
