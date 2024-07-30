@@ -225,7 +225,6 @@ function draw() {
                 );
                 pop();
             }
-
             //draw one leaf
             fill(R[0][s] + r, G[0][s] + g, B[0][s] + b, 150);
             strokeWeight(1);
