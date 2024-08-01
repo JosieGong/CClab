@@ -3,6 +3,7 @@
 
 let snow = [];
 let snownum = 30
+let more=0
 
 function setup() {
   let canvas = createCanvas(800, 600);
@@ -26,7 +27,10 @@ function draw() {
   background(160, 200, 220);
   fill(244,250,255)
   strokeWeight(0) 
-  rect(0,450,800,150)
+  if (more<=100){if(frameCount%200==1){
+    more+=10
+  }}
+  rect(0,500-more,800,100+more)
 
   // update and display
   for (let i = 0; i < snow.length; i++) {
