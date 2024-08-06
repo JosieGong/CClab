@@ -166,6 +166,7 @@ function washWindow() {
             image(clothes3after, 0, 0, 1366, 1024)
             if (astick.time >= 3) {
                 stickstep = 1
+                astick.time = 0
             }
             astick.display()
             astick.update()
@@ -179,7 +180,13 @@ function washWindow() {
             clothes.update()
             image(stick, 50, 850, 420, 109)
 
-        }
+        } else if (stickstep == 3) {           
+             image(clothes2after, 0, 0, 1366, 1024)
+            if (astick.time >= 3) {
+                stickstep = 1
+            }
+            astick.display()
+            astick.update()}
         image(scoop1, scoopx, scoopy, 290, 140)
     }
 
@@ -259,6 +266,7 @@ class Clothes {
     update() {
         if (this.isDragged == true) {
             // if(clothesstep<=2){
+            console.log(1)
             this.x = mouseX - 120
             this.y = mouseY - 150
         }
@@ -281,7 +289,6 @@ class Clothes {
     }
 
     checkIsPressed() {
-        fill(0)
         if (this.x - 50 <= mouseX &&
             mouseX <= this.x + 250 &&
             this.y - 50 <= mouseY &&
@@ -353,9 +360,11 @@ function mousePressed() {
         } else if (washclothesstep == 1) {
             clothes.checkIsPressed()
         } else if (washclothesstep == 2) {
-            if (stickstep == 0) {
+            if (stickstep == 0||stickstep == 3) {
                 astick.checkIsPressed()
-            } else if (stickstep == 2) { scoop.checkIsPressed() }
+            } else if (stickstep == 2) { 
+                clothes.checkIsPressed() 
+                console.log(2)}
         }
     }
 
@@ -369,7 +378,7 @@ function mouseReleased() {
         } else if (washclothesstep == 1) {
             clothes.isDragged = false
         } else if (washclothesstep == 2) {
-            if (stickstep == 0) {
+            if (stickstep == 0 ||stickstep == 3) {
                 astick.isDragged = false
                 disx = 0
                 disy = 0
@@ -509,11 +518,18 @@ function mouseClicked() {
                     stickstep = 2
                 }
             } else if (stickstep == 2) {
-                if (mouseX <= 1100 &&
-                    mouseX >= 640 &&
+                if (mouseX <= 540 &&
+                    mouseX >= 120 &&
+                    mouseY <= 700 &&
+                    mouseY >= 570 ){
+                    stickstep = 3
+                }
+            }else if (stickstep==3){
+                if (mouseX <= 900 &&
+                    mouseX >= 650 &&
                     mouseY <= 850 &&
-                    mouseY >= 500) {
-                    stickstep = 2
+                    mouseY >= 550) {
+                    astick.isStriking = true
                 }
             }
         }
