@@ -1,0 +1,36 @@
+body {
+    background-color: rgb(167, 216, 199);
+}
+
+.special {
+    color: antiquewhite;
+}
+
+#viw {
+    background-color: rgb(144, 226, 43);
+}
+
+.textbox {
+    background-color: rgb(47, 139, 108);
+    border-style: dashed;
+    border-color: bisque;
+    border-width: 3px;
+
+    margin: 20px;
+    padding: 15px;
+}
+
+#cancas-parent {
+    margin: 55px;
+}
+
+.one {
+    position: fixed;
+    bottom: 100px;
+}
+
+.two {
+    position: absolute;
+    left: 200px;
+    bottom: 20px;
+}
